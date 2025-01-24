@@ -1,4 +1,4 @@
-# Day 01 - Piscine SQL
+# Day 01
 
 ## _First steps working with sets and JOINs in SQL_
 
@@ -8,32 +8,30 @@ Resume: Today you will see how to get needed data based on sets constructions an
 
 1. [Chapter I](#chapter-i) \
     1.1. [Preamble](#preamble)
-2. [Chapter II](#chapter-ii) \
-    2.1. [General Rules](#general-rules)
-3. [Chapter III](#chapter-iii) \
-    3.1. [Rules of the day](#rules-of-the-day)  
-4. [Chapter IV](#chapter-iv) \
-    4.1. [Exercise 00 - Let’s make UNION dance](#exercise-00-lets-make-union-dance)  
-5. [Chapter V](#chapter-v) \
-    5.1. [Exercise 01 - UNION dance with subquery](#exercise-01-union-dance-with-subquery)  
-6. [Chapter VI](#chapter-vi) \
-    6.1. [Exercise 02 - Duplicates or not duplicates](#exercise-02-duplicates-or-not-duplicates)  
-7. [Chapter VII](#chapter-vii) \
-    7.1. [Exercise 03 - “Hidden” Insights](#exercise-03-hidden-insights)  
-8. [Chapter VIII](#chapter-viii) \
-    8.1. [Exercise 04 - Difference? Yep, let's find the difference between multisets](#exercise-04-difference-yep-lets-find-the-difference-between-multisets)
-9. [Chapter IX](#chapter-ix) \
-    9.1. [Exercise 05 - Did you hear about Cartesian Product?](#exercise-05-did-you-hear-about-cartesian-product)
-10. [Chapter X](#chapter-x) \
-    10.1. [Exercise 06 - Lets see on “Hidden” Insights](#exercise-06-lets-see-on-hidden-insights)
-11. [Chapter XI](#chapter-xi) \
-    11.1. [Exercise 07 - Just make a JOIN](#exercise-07-just-make-a-join)
-12. [Chapter XII](#chapter-xii) \
-    12.1. [Exercise 08 - Migrate JOIN to NATURAL JOIN](#exercise-08-migrate-join-to-natural-join)
-13. [Chapter XIII](#chapter-xiii) \
-    13.1. [Exercise 09 - IN versus EXISTS](#exercise-09-in-versus-exists)
-14. [Chapter XIV](#chapter-xiv) \
-    14.1. [Exercise 10 - Global JOIN](#exercise-10-global-join)
+2. [Chapter II](#chapter-iii) \
+    2.1. [Rules of the day](#rules-of-the-day)  
+3. [Chapter III](#chapter-iv) \
+    3.1. [Exercise 00 - Let’s make UNION dance](#exercise-00-lets-make-union-dance)  
+4. [Chapter V](#chapter-v) \
+    4.1. [Exercise 01 - UNION dance with subquery](#exercise-01-union-dance-with-subquery)  
+5. [Chapter VI](#chapter-vi) \
+    5.1. [Exercise 02 - Duplicates or not duplicates](#exercise-02-duplicates-or-not-duplicates)  
+6. [Chapter VII](#chapter-vii) \
+    6.1. [Exercise 03 - “Hidden” Insights](#exercise-03-hidden-insights)  
+7. [Chapter VIII](#chapter-viii) \
+    7.1. [Exercise 04 - Difference? Yep, let's find the difference between multisets](#exercise-04-difference-yep-lets-find-the-difference-between-multisets)
+8. [Chapter IX](#chapter-ix) \
+    8.1. [Exercise 05 - Did you hear about Cartesian Product?](#exercise-05-did-you-hear-about-cartesian-product)
+9. [Chapter X](#chapter-x) \
+    9.1. [Exercise 06 - Lets see on “Hidden” Insights](#exercise-06-lets-see-on-hidden-insights)
+10. [Chapter XI](#chapter-xi) \
+    10.1. [Exercise 07 - Just make a JOIN](#exercise-07-just-make-a-join)
+11. [Chapter XII](#chapter-xii) \
+    11.1. [Exercise 08 - Migrate JOIN to NATURAL JOIN](#exercise-08-migrate-join-to-natural-join)
+12. [Chapter XIII](#chapter-xiii) \
+    12.1. [Exercise 09 - IN versus EXISTS](#exercise-09-in-versus-exists)
+13. [Chapter XIV](#chapter-xiv) \
+    13.1. [Exercise 10 - Global JOIN](#exercise-10-global-join)
 
 
 ## Chapter I
@@ -56,21 +54,6 @@ The main rules for working with sets are as follows:
 ![D01_02](misc/images/D01_02.png)
 
 In addition, SQL sets are useful for calculating some specific data science metrics, such as the Jaccard distance between 2 objects based on existing data features.
-
-## Chapter II
-## General Rules
-
-- Use this page as your only reference. Do not listen to rumors and speculations about how to prepare your solution.
-- Make sure you are using the latest version of PostgreSQL.
-- It is perfectly fine if you use the IDE to write source code (aka SQL script).
-- To be evaluated, your solution must be in your GIT repository.
-- Your solutions will be evaluated by your peers.
-- You should not leave any files in your directory other than those explicitly specified by the exercise instructions. It is recommended that you modify your `.gitignore` to avoid accidents.
-- Got a question? Ask your neighbor to the right. Otherwise, try your neighbor on the left.
-- Your reference manual: mates / Internet / Google. 
-- Read the examples carefully. You may need things not specified in the topic.
-- And may the SQL-Force be with you!
-Absolutely anything can be represented in SQL! Let's get started and have fun!
 
 ## Chapter III
 ## Rules of the day
@@ -129,7 +112,15 @@ Please write a SQL statement that returns the menu identifier and pizza names fr
 | 1 | cheese pizza |
 | ... | ... |
 
-
+### Decision
+```SQL
+SELECT p.id AS object_id, p.name AS object_name
+FROM person p
+UNION
+SELECT m.id AS object_id, m.pizza_name AS object_name
+FROM menu m
+ORDER BY object_id, object_name;
+```
 
 ## Chapter V
 ## Exercise 01 - UNION dance with subquery
@@ -152,6 +143,16 @@ Please modify an SQL statement from "Exercise 00" by removing the object_id colu
 | cheese pizza |
 | ... |
 
+### Decision
+```SQL
+(SELECT person.name AS object_name
+    FROM person
+ 	ORDER BY name)
+    UNION ALL 
+(SELECT menu.pizza_name AS object_name
+    FROM menu
+    ORDER BY pizza_name)
+```
 
 ## Chapter VI
 ## Exercise 02 - Duplicates or not duplicates
@@ -166,6 +167,16 @@ Please modify an SQL statement from "Exercise 00" by removing the object_id colu
 | SQL Syntax Construction                        | `DISTINCT`, `GROUP BY`, `HAVING`, any type of `JOINs`                                                                                              |
  
 Write an SQL statement that returns unique pizza names from the `menu` table and sorts them by the pizza_name column in descending order. Please note the Denied section.
+
+### Decision
+```SQL
+SELECT pizza_name
+FROM menu
+INTERSECT
+SELECT pizza_name
+FROM menu
+ORDER BY pizza_name DESC;
+```
 
 ## Chapter VII
 ## Exercise 03 - “Hidden” Insights
@@ -190,6 +201,18 @@ Write an SQL statement that returns common rows for attributes order_date, perso
 | 2022-01-04 | 3 |
 | ... | ... |
 
+
+### Decision
+```SQL
+(SELECT p.order_date AS action_date, p.person_id AS person_id
+    FROM person_order p
+ 	ORDER BY action_date ASC, person_id DESC)
+    UNION ALL
+(SELECT p.visit_date AS action_date, p.person_id AS person_id
+    FROM person_visits p
+    ORDER BY action_date ASC,person_id DESC)
+```
+
 ## Chapter VIII
 ## Exercise 04 - Difference? Yep, let's find the difference between multisets.
 
@@ -204,6 +227,17 @@ Write an SQL statement that returns common rows for attributes order_date, perso
 | SQL Syntax Construction                        |  any type of `JOINs`                                                                                              |
 
 Please write a SQL statement that returns a difference (minus) of person_id column values while saving duplicates between `person_order` table and `person_visits` table for order_date and visit_date are for January 7, 2022.
+
+### Decision
+```SQL
+SELECT person_id
+FROM person_order
+WHERE order_date = '2022-01-07'
+EXCEPT ALL
+SELECT person_id 
+FROM  person_visits 
+WHERE visit_date = '2022-01-07';
+```
 
 ## Chapter IX
 ## Exercise 05 - Did you hear about Cartesian Product?
@@ -224,6 +258,12 @@ Please write a SQL statement that returns all possible combinations between `per
 | 1 | Anna | 16 | female | Moscow | 2 | Dominos | 4.3 |
 | ... | ... | ... | ... | ... | ... | ... | ... |
 
+### Decision
+```SQL
+SELECT DISTINCT person.id, person.name AS person_name, person.age, person.gender, person.address,
+       pizzeria.id AS pizzeria_id, pizzeria.name AS pizzeria_name, pizzeria.rating
+FROM person, pizzeria;
+```
 
 ## Chapter X
 ## Exercise 06 - Lets see on “Hidden” Insights
@@ -245,6 +285,17 @@ Let's go back to Exercise #03 and modify our SQL statement to return person name
 | 2022-01-01 | Andrey |
 | ... | ... |
 
+### Decision
+```SQL
+(SELECT p.order_date AS action_date, name AS person_name
+    FROM person_order p, person)
+    UNION ALL
+(SELECT p.visit_date AS action_date, name AS person_name
+    FROM person_visits p, person
+    ORDER BY action_date ASC, person_name DESC)
+```
+
+
 ## Chapter XI
 ## Exercise 07 - Just make a JOIN
 
@@ -265,6 +316,13 @@ Write an SQL statement that returns the order date from the `person_order` table
 | 2022-01-01 | Anna (age:16) |
 | ... | ... |
 
+### Decision
+```SQL
+SELECT order_date, CONCAT(person.name ,'(age:', person.age,')') AS person_information
+FROM person_order
+JOIN person ON person_order.person_id = person.id 
+ORDER BY order_date, person_information;
+```
 
 ## Chapter XII
 ## Exercise 08 - Migrate JOIN to NATURAL JOIN
@@ -282,6 +340,15 @@ Write an SQL statement that returns the order date from the `person_order` table
 
 Please rewrite a SQL statement from Exercise #07 by using NATURAL JOIN construction. The result must be the same like for Exercise #07.  
 
+### Decision
+```SQL
+SELECT order_date, CONCAT(from_inf.name ,'(age:', from_inf.age,')')
+	AS person_information
+FROM person_order
+NATURAL JOIN (SELECT id AS person_id ,name ,age FROM person) AS from_inf
+ORDER BY order_date, person_information;
+```
+
 ## Chapter XIII
 ## Exercise 09 - IN versus EXISTS
 
@@ -294,6 +361,17 @@ Please rewrite a SQL statement from Exercise #07 by using NATURAL JOIN construct
 | Language                        | ANSI SQL                                                                                              |
 
 Write 2 SQL statements that return a list of pizzerias that have not been visited by people using IN for the first and EXISTS for the second.
+
+### Decision
+```SQL
+SELECT name
+FROM pizzeria
+WHERE id NOT IN (SELECT pizzeria_id FROM person_visits);
+
+SELECT name
+FROM pizzeria
+WHERE NOT EXISTS(SELECT pizzeria_id FROM person_visits WHERE pizzeria_id = pizzeria.id);
+```
 
 ## Chapter XIV
 ## Exercise 10 - Global JOIN
@@ -316,3 +394,12 @@ The sample result (with named columns) is provided below and yes ... please make
 | Anna | cheese pizza | Pizza Hut |
 | ... | ... | ... |
 
+### Decision
+```SQL
+SELECT  pr.name AS person_name, m.pizza_name AS pizza_name, p.name AS name 
+FROM person_order AS po
+JOIN person pr ON po.person_id = pr.id
+JOIN menu m ON m.id = po.menu_id
+JOIN pizzeria p ON m.pizzeria_id = p.id
+ORDER BY person_name;
+```
